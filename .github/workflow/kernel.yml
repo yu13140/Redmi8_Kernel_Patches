@@ -1,0 +1,72 @@
+name: Extract Kernel from LineageOS 21
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    env:
+      PAT: ${{ secrets.ACCESS_TOKEN }}    
+    timeout-minutes: 360
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git curl python3 python3-pip
+
+    - name: Install Repo Tool
+      run: |
+        mkdir -p ~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+        echo "$HOME/bin" >> $GITHUB_PATH
+
+    - name: Git Config
+      run: |
+        git config --global user.email "whmyc801@gmail.com"
+        git config --global user.name "yu13140"
+
+    - name: Initialize Repository
+      run: |
+        mkdir lineage
+        cd lineage
+        repo init -u https://github.com/LineageOS/android.git -b lineage-21.0
+        repo sync -j64
+
+    - name: Sync Source Code
+      run: |
+        . build/envsetup.sh
+        breakfast "Mi439"
+
+    - name: Extract Kernel Files
+      run: |
+        mkdir kernel_files
+        ls lineage/kernel/xiaomi/
+        cp -r lineage/kernel/xiaomi/sdm439/* kernel_files/
+        # 验证内核文件存在
+        if [ ! -d "kernel_files" ]; then
+          echo "❌ Kernel files not found!"
+          exit 1
+        fi
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: olive-kernel
+        path: kernel_files/
+
+    # 可选：自动提交到仓库
+    - name: Commit to Repository
+      run: |
+        cd ~/kernel_files          
+        git remote set-url origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"        
+        git add .
+        git commit -m "Update kernel files $(date +'%Y-%m-%d')" || echo "No changes to commit"
+        git push -u origin main
