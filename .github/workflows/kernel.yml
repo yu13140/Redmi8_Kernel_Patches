@@ -46,8 +46,9 @@ jobs:
 
     - name: Initialize Repository
       run: |
-        mkdir lineage
-        cd lineage
+        pwd
+        mkdir ~/lineage
+        cd ~/lineage
         repo init -u https://github.com/LineageOS/android.git -b lineage-21.0
         repo sync -j16
 
@@ -58,9 +59,9 @@ jobs:
 
     - name: Extract Kernel Files
       run: |
-        mkdir kernel_files
-        ls lineage/kernel/xiaomi/
-        cp -r lineage/kernel/xiaomi/sdm439/* kernel_files/
+        mkdir ~/kernel_files
+        ls ~/lineage/kernel/xiaomi/
+        mv ~/lineage/kernel/xiaomi/sdm439/* ~/kernel_files/
         # 验证内核文件存在
         if [ ! -d "kernel_files" ]; then
           echo "❌ Kernel files not found!"
