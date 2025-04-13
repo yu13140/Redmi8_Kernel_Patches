@@ -49,7 +49,7 @@ jobs:
         mkdir lineage
         cd lineage
         repo init -u https://github.com/LineageOS/android.git -b lineage-21.0
-        repo sync -j64
+        repo sync -j16
 
     - name: Sync Source Code
       run: |
