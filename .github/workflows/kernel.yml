@@ -34,10 +34,10 @@ jobs:
           Clang
           LLVM
         docker_include: ".+"
-        docker_prune: "True"
-        docker_clean: "True"
-        apt_prune: "True"
-        apt_clean: "True"
+        docker_prune: "False"
+        docker_clean: "False"
+        apt_prune: "False"
+        apt_clean: "False"
         homebrew_prune: "True"
         homebrew_clean: "True"
         npm_prune: "True"
@@ -53,7 +53,7 @@ jobs:
         remove-android: 'true'
         remove-haskell: 'true'
         remove-codeql: 'true'
-        remove-docker-images: 'true'
+        remove-docker-images: 'false'
 
     - name: Free up disk space complete
       run: |
