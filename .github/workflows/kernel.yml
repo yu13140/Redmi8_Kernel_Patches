@@ -63,7 +63,7 @@ jobs:
         echo "=============================================================================="
 
     - name: Setup Environment
-      run: |
+      run: |       
         sudo apt-get update
         sudo apt-get install -y git curl python3 python3-pip
 
@@ -81,6 +81,7 @@ jobs:
 
     - name: Initialize Repository
       run: |
+        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches
         mkdir lineage
         cd lineage
         repo init -u https://github.com/LineageOS/android.git -b lineage-21.0
@@ -88,12 +89,13 @@ jobs:
 
     - name: Sync Source Code
       run: |
-        cd lineage
+        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage
         . build/envsetup.sh
         breakfast "Mi439"
 
     - name: Extract Kernel Files
       run: |
+        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches
         ls lineage/kernel/xiaomi/
         # 验证内核文件存在
         if [ ! -d "./lineage/kernel/xiaomi/sdm439/" ]; then
@@ -105,11 +107,11 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: olive-kernel
-        path: ./lineage/kernel/xiaomi/sdm439/
+        path: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/kernel/xiaomi/sdm439/
 
     - name: Commit to Repository
       run: |
-        cd lineage/kernel/xiaomi/sdm439/         
+        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/kernel/xiaomi/sdm439/         
         git remote set-url origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"        
         git add .
         git commit -m "Update kernel files $(date +'%Y-%m-%d')" || echo "No changes to commit"
