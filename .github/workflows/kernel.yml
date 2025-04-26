@@ -1,7 +1,8 @@
-name: Extract Kernel from LineageOS 21
+name: Extract Kernel from LineageOS 22.2
 
 on:
   workflow_dispatch:
+  push:
   schedule:
     - cron: '0 0 * * *'
 
@@ -87,11 +88,13 @@ jobs:
         git config --global user.name "yu13140"
 
     - name: Initialize Repository
-      run: |       
+      run: |          
         mkdir lineage
+        mv yuzkernel.sh ./lineage
         cd lineage
         repo init -u https://github.com/LineageOS/android.git -b lineage-22.2
-        repo sync -c -j32 --no-clone-bundle
+        sh yuzkernel.sh
+        echo "======Ending Repo======"
         ls device
         ls device/xiaomi
 
