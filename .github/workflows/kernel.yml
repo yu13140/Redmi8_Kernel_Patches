@@ -91,6 +91,7 @@ jobs:
       run: |          
         mkdir lineage      
         cd lineage
+        repo init -u https://github.com/LineageOS/android.git -b lineage-22.2
         echo "======start repo sync======"
         repo sync -c -j32 --no-clone-bundle
         while [ $? = 1 ]; do
