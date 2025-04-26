@@ -9,7 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     env:
-      PAT: ${{ secrets.ACCESS_TOKEN }}    
+      PAT: ${{ secrets.ACCESS_TOKEN }}      
+      GITHUB_WORKSPACE: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches
     timeout-minutes: 360
 
     steps:
@@ -55,6 +56,11 @@ jobs:
         remove-codeql: 'true'
         remove-docker-images: 'false'
 
+    - name: Clean root partition
+      run: |
+        sudo rm -rf /tmp/*
+        sudo rm -rf /var/cache/apt/archives/*                 
+
     - name: Free up disk space complete
       run: |
         echo "Free up disk space complete"
@@ -66,9 +72,10 @@ jobs:
       run: |       
         sudo apt-get update
         sudo apt-get install -y git curl python3 python3-pip
+        sudo apt install brotli
 
     - name: Install Repo Tool
-      run: |        
+      run: |          
         mkdir -p bin
         curl https://storage.googleapis.com/git-repo-downloads/repo > bin/repo
         chmod a+x bin/repo
@@ -80,24 +87,46 @@ jobs:
         git config --global user.name "yu13140"
 
     - name: Initialize Repository
-      run: |
-        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches
+      run: |       
         mkdir lineage
         cd lineage
-        repo init -u https://github.com/LineageOS/android.git -b lineage-21.0
-        repo sync -j32
+        repo init -u https://github.com/LineageOS/android.git -b lineage-22.2
+        repo sync -c -j32 --no-clone-bundle
+        ls device
+        ls device/xiaomi
+
+    - name: Extract proprietary blobs
+      run: |      
+        mkdir android/system_dump/
+        cd android/system_dump/
+        wget --output-document=lineageos.zip https://mirror.tuna.tsinghua.edu.cn/lineage-rom/full/Mi439/20250424/lineage-22.2-20250424-nightly-Mi439-signed.zip
+        unzip lineage-zip system.transfer.list system.new.dat* vendor.transfer.list vendor.new.dat*
+        rm -f lineage.zip
+        brotli --decompress --output=system.new.dat system.new.dat.br
+        brotli --decompress --output=vendor.new.dat vendor.new.dat.br
+        git clone https://github.com/xpirt/sdat2img
+        python sdat2img/sdat2img.py system.transfer.list system.new.dat system.img
+        python sdat2img/sdat2img.py vendor.transfer.list vendor.new.dat vendor.img
+        mkdir system/
+        sudo mount system.img system/
+        sudo rm -rf system/vendor
+        sudo mkdir system/vendor
+        sudo mount vendor.img system/vendor/
+        cd ../lineage/device/xiaomi/Mi439
+        ./extract-files.sh /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/android/system_dump/
+        cd $GITHUB_WORKSPACE
+        sudo umount android/system_dump/system
+        rm -rf android/system_dump/
 
     - name: Sync Source Code
       run: |
-        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage
+        cd lineage
         . build/envsetup.sh
         breakfast "Mi439"
 
     - name: Extract Kernel Files
-      run: |
-        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches
-        ls lineage/kernel/xiaomi/
-        # 验证内核文件存在
+      run: |      
+        ls lineage/kernel/xiaomi/      
         if [ ! -d "./lineage/kernel/xiaomi/sdm439/" ]; then
           echo "❌ Kernel files not found!"
           exit 1
@@ -111,7 +140,7 @@ jobs:
 
     - name: Commit to Repository
       run: |
-        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/kernel/xiaomi/sdm439/         
+        cd lineage/kernel/xiaomi/sdm439/         
         git remote set-url origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"        
         git add .
         git commit -m "Update kernel files $(date +'%Y-%m-%d')" || echo "No changes to commit"
