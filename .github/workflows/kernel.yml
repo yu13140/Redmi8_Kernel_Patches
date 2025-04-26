@@ -89,11 +89,11 @@ jobs:
 
     - name: Initialize Repository
       run: |          
-        mkdir lineage
-        mv yuzkernel.sh ./lineage
+        mkdir lineage      
         cd lineage
         repo init -u https://github.com/LineageOS/android.git -b lineage-22.2
-        sh yuzkernel.sh
+        wget https://raw.githubusercontent.com/yu13140/Redmi8_Kernel_Patches/refs/heads/main/yuzkernel.sh
+        bash yuzkernel.sh
         echo "======Ending Repo======"
         ls device
         ls device/xiaomi
