@@ -95,12 +95,36 @@ jobs:
         wget https://raw.githubusercontent.com/yu13140/Redmi8_Kernel_Patches/refs/heads/main/yuzkernel.sh
         bash yuzkernel.sh
         echo "======Ending Repo======"
-
-    - name: Debug
+        rm -f yuzkernel.sh
+        
+    - name: Extract proprietary blobs
       run: |
-        cd lineage/device                         
-        echo "======Device======"
-        ls -R        
+        git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_Mi439.git --depth=1
+        mkdir lineage/device/xiaomi/Mi439/
+        mv android_device_xiaomi_Mi439/* lineage/device/xiaomi/Mi439/
+
+    - name: Extract proprietary blobs
+      run: |
+        mkdir android/system_dump/
+        cd android/system_dump/
+        wget --output-document=lineageos.zip https://mirror.tuna.tsinghua.edu.cn/lineage-rom/full/Mi439/20250424/lineage-22.2-20250424-nightly-Mi439-signed.zip
+        unzip lineage-zip system.transfer.list system.new.dat* vendor.transfer.list vendor.new.dat*
+        rm -f lineage.zip
+        brotli --decompress --output=system.new.dat system.new.dat.br
+        brotli --decompress --output=vendor.new.dat vendor.new.dat.br
+        git clone https://github.com/xpirt/sdat2img
+        python sdat2img/sdat2img.py system.transfer.list system.new.dat system.img
+        python sdat2img/sdat2img.py vendor.transfer.list vendor.new.dat vendor.img
+        mkdir system/
+        sudo mount system.img system/
+        sudo rm -rf system/vendor
+        sudo mkdir system/vendor
+        sudo mount vendor.img system/vendor/
+        cd /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/device/xiaomi/Mi439
+        ./extract-files.sh /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/android/system_dump/
+        cd $GITHUB_WORKSPACE
+        sudo umount android/system_dump/system
+        rm -rf android/system_dump/
 
     - name: Sync Source Code
       run: |
