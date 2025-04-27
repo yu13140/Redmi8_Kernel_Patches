@@ -124,7 +124,7 @@ jobs:
         mkdir -p system/
         sudo mount system.img system/
         sudo rm -rf system/vendor
-        mkdir -p system/vendor
+        sudo mkdir -p system/vendor
         sudo mount vendor.img system/vendor/
         sudo rm -rf sdat2img/
         cd $GITHUB_WORKSPACE/lineage/device/xiaomi/Mi439
