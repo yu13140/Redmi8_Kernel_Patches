@@ -95,8 +95,14 @@ jobs:
         wget https://raw.githubusercontent.com/yu13140/Redmi8_Kernel_Patches/refs/heads/main/yuzkernel.sh
         bash yuzkernel.sh
         echo "======Ending Repo======"
-        ls device
-        ls device/xiaomi
+
+    - name: Debug
+      run: |          
+        ls -R       
+        echo "======Device======"
+        cd device
+        ls -R
+        exit 1
 
     - name: Extract proprietary blobs
       run: |      
