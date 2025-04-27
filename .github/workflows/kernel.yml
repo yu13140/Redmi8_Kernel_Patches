@@ -91,7 +91,7 @@ jobs:
       run: |          
         mkdir lineage      
         cd lineage
-        repo init -u https://github.com/LineageOS/android.git -b lineage-22.2
+        repo init -u https://github.com/LineageOS/android.git -b lineage-22.2 --depth=1
         wget https://raw.githubusercontent.com/yu13140/Redmi8_Kernel_Patches/refs/heads/main/yuzkernel.sh
         bash yuzkernel.sh
         echo "======Ending Repo======"
