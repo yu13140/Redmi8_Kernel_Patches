@@ -122,16 +122,16 @@ jobs:
         python sdat2img/sdat2img.py vendor.transfer.list vendor.new.dat vendor.img
         rm -f vendor.new.dat vendor.new.dat.br
         mkdir -p system/
-        mount system.img system/
+        sudo mount system.img system/
         rm -rf system/vendor
         mkdir -p system/vendor
-        mount vendor.img system/vendor/
+        sudo mount vendor.img system/vendor/
         rm -rf sdat2img/
         cd $GITHUB_WORKSPACE/lineage/device/xiaomi/Mi439
         ./extract-files.sh /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/android/system_dump/
         cd $GITHUB_WORKSPACE
-        umount android/system_dump/system/vendor/
-        umount android/system_dump/system/
+        sudo umount android/system_dump/system/vendor/
+        sudo umount android/system_dump/system/
         rm -rf android/system_dump/
         rm -rf lineage/device/xiaomi/mithorium-common/
 
