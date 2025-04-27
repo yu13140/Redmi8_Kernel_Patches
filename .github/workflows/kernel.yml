@@ -100,7 +100,6 @@ jobs:
       run: |
         cd lineage/device                         
         echo "======Device======"
-        cd device
         ls -R        
 
     - name: Sync Source Code
