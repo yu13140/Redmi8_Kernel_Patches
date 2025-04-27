@@ -97,15 +97,15 @@ jobs:
         echo "======Ending Repo======"
         rm -f yuzkernel.sh
         
-    - name: Extract proprietary blobs
+    - name: Clone Device File
       run: |
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_Mi439.git --depth=1
-        mkdir lineage/device/xiaomi/Mi439/
+        mkdir -p lineage/device/xiaomi/Mi439/
         mv android_device_xiaomi_Mi439/* lineage/device/xiaomi/Mi439/
 
     - name: Extract proprietary blobs
       run: |
-        mkdir android/system_dump/
+        mkdir -p android/system_dump/
         cd android/system_dump/
         wget --output-document=lineageos.zip https://mirror.tuna.tsinghua.edu.cn/lineage-rom/full/Mi439/20250424/lineage-22.2-20250424-nightly-Mi439-signed.zip
         unzip lineage-zip system.transfer.list system.new.dat* vendor.transfer.list vendor.new.dat*
