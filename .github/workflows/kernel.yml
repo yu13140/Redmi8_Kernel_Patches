@@ -97,35 +97,11 @@ jobs:
         echo "======Ending Repo======"
 
     - name: Debug
-      run: |          
-        ls -R       
+      run: |
+        cd lineage/device                         
         echo "======Device======"
         cd device
-        ls -R
-        exit 1
-
-    - name: Extract proprietary blobs
-      run: |      
-        mkdir android/system_dump/
-        cd android/system_dump/
-        wget --output-document=lineageos.zip https://mirror.tuna.tsinghua.edu.cn/lineage-rom/full/Mi439/20250424/lineage-22.2-20250424-nightly-Mi439-signed.zip
-        unzip lineage-zip system.transfer.list system.new.dat* vendor.transfer.list vendor.new.dat*
-        rm -f lineage.zip
-        brotli --decompress --output=system.new.dat system.new.dat.br
-        brotli --decompress --output=vendor.new.dat vendor.new.dat.br
-        git clone https://github.com/xpirt/sdat2img
-        python sdat2img/sdat2img.py system.transfer.list system.new.dat system.img
-        python sdat2img/sdat2img.py vendor.transfer.list vendor.new.dat vendor.img
-        mkdir system/
-        sudo mount system.img system/
-        sudo rm -rf system/vendor
-        sudo mkdir system/vendor
-        sudo mount vendor.img system/vendor/
-        cd ../lineage/device/xiaomi/Mi439
-        ./extract-files.sh /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/android/system_dump/
-        cd $GITHUB_WORKSPACE
-        sudo umount android/system_dump/system
-        rm -rf android/system_dump/
+        ls -R        
 
     - name: Sync Source Code
       run: |
