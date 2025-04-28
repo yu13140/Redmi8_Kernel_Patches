@@ -95,16 +95,16 @@ jobs:
         wget https://raw.githubusercontent.com/yu13140/Redmi8_Kernel_Patches/refs/heads/main/yuzkernel.sh
         bash yuzkernel.sh
         echo "======Ending Repo======"
-        sudo rm -f yuzkernel.sh
+        rm -f yuzkernel.sh
         
     - name: Clone Device File
       run: |
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_Mi439.git --depth=1
         mkdir -p lineage/device/xiaomi/Mi439/
-        sudo mv android_device_xiaomi_Mi439/* lineage/device/xiaomi/Mi439/
+        mv android_device_xiaomi_Mi439/* lineage/device/xiaomi/Mi439/
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_mithorium-common.git --depth=1
         mkdir -p lineage/device/xiaomi/mithorium-common/
-        sudo mv android_device_xiaomi_mithorium-common/* lineage/device/xiaomi/mithorium-common/
+        mv android_device_xiaomi_mithorium-common/* lineage/device/xiaomi/mithorium-common/
         
         
     - name: Extract proprietary blobs
@@ -118,22 +118,19 @@ jobs:
         brotli --decompress --output=vendor.new.dat vendor.new.dat.br
         git clone https://github.com/xpirt/sdat2img
         python sdat2img/sdat2img.py system.transfer.list system.new.dat system.img
-        sudo rm -f system.new.dat system.new.dat.br
         python sdat2img/sdat2img.py vendor.transfer.list vendor.new.dat vendor.img
-        sudo rm -f vendor.new.dat vendor.new.dat.br
+        rm -f vendor.new.dat vendor.new.dat.br system.new.dat system.new.dat.br
         mkdir -p system/
         sudo mount system.img system/
-        sudo rm -rf system/vendor
+        sudo rm -rf system/vendor sdat2img/
         sudo mkdir -p system/vendor
         sudo mount vendor.img system/vendor/
-        sudo rm -rf sdat2img/
         cd $GITHUB_WORKSPACE/lineage/device/xiaomi/Mi439
         ./extract-files.sh /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/android/system_dump/
         cd $GITHUB_WORKSPACE
         sudo umount android/system_dump/system/vendor/
         sudo umount android/system_dump/system/
-        sudo rm -rf android/system_dump/
-        sudo rm -rf lineage/device/xiaomi/mithorium-common/
+        sudo rm -rf android/system_dump/ lineage/device/xiaomi/mithorium-common/
 
     - name: Sync Source Code
       run: |
@@ -151,15 +148,16 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: olive-kernel
+        name: kernel-source-code.zip
         path: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/kernel/xiaomi/msm8937/
 
     - name: Commit to Repository
       run: |
-        cd lineage/kernel/xiaomi/msm8937/
+        rm -rf lineage/.repo/project/kernel/xiaomi/msm8937.git/
+        cd lineage/kernel/xiaomi/msm8937/        
         git init
         git remote add origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"
         git checkout -b lineage-22.2
         git add .
         git commit -m "Update kernel files $(date +'%Y-%m-%d')" || echo "No changes to commit"
-        git push -u origin lineage-22.2
+        git push -f -u origin lineage-22.2
