@@ -145,19 +145,20 @@ jobs:
           exit 1
         fi
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: kernel-source-code.zip
-        path: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/kernel/xiaomi/msm8937/
-
     - name: Commit to Repository
       run: |
-        rm -rf lineage/.repo/project/kernel/xiaomi/msm8937.git/
-        cd lineage/kernel/xiaomi/msm8937/        
+        sudo rm -rf lineage/.repo/project/kernel/xiaomi/msm8937.git
+        cd lineage/kernel/xiaomi/msm8937/
+        sudo rm -rf .git
         git init
         git remote add origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"
         git checkout -b lineage-22.2
         git add .
         git commit -m "Update kernel files $(date +'%Y-%m-%d')" || echo "No changes to commit"
         git push -f -u origin lineage-22.2
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: kernel-source-code.zip
+        path: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/kernel/xiaomi/msm8937/        
