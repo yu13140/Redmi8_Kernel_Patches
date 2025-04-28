@@ -156,10 +156,10 @@ jobs:
 
     - name: Commit to Repository
       run: |
-        cd lineage/kernel/xiaomi/msm8937/         
-        git remote set-url origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"
-        git branch lineage-22.2
-        git checkout lineage-22.2       
+        cd lineage/kernel/xiaomi/msm8937/
+        git init
+        git remote add origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"
+        git checkout -b lineage-22.2
         git add .
         git commit -m "Update kernel files $(date +'%Y-%m-%d')" || echo "No changes to commit"
         git push -u origin lineage-22.2
