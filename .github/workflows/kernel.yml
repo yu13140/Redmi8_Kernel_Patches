@@ -142,9 +142,8 @@ jobs:
         breakfast "Mi439"
 
     - name: Extract Kernel Files
-      run: |      
-        ls lineage/kernel/xiaomi/      
-        if [ ! -d "./lineage/kernel/xiaomi/sdm439/" ]; then
+      run: |     
+        if [ ! -d "./lineage/kernel/xiaomi/msm8937/" ]; then
           echo "❌ Kernel files not found!"
           exit 1
         fi
@@ -153,12 +152,14 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: olive-kernel
-        path: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/kernel/xiaomi/sdm439/
+        path: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/lineage/kernel/xiaomi/msm8937/
 
     - name: Commit to Repository
       run: |
-        cd lineage/kernel/xiaomi/sdm439/         
-        git remote set-url origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"        
+        cd lineage/kernel/xiaomi/msm8937/         
+        git remote set-url origin "https://${PAT}@github.com/yu13140/LineageOS_Kernel_Redmi8.git"
+        git branch lineage-22.2
+        git checkout lineage-22.2       
         git add .
         git commit -m "Update kernel files $(date +'%Y-%m-%d')" || echo "No changes to commit"
-        git push -u origin main
+        git push -u origin lineage-22.2
