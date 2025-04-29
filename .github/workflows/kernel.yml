@@ -155,11 +155,11 @@ jobs:
         echo "CONFIG_HAVE_KPROBES=y" >> arch/arm64/configs/gki_defconfig
         echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/gki_defconfig
         echo "CONFIG_OVERLAY_FS=y" >> arch/arm64/configs/gki_defconfig
-        mka kernel
-        ls -a /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/out/target/product/
+        croot
+        brunch Mi439        
         
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: kernel
-        path: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches/out/target/product/msm8937/kernel
+        path: $OUT/lineage-22.2-20250426-UNOFFICIAL-Mi439.zip
