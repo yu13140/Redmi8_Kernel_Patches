@@ -155,7 +155,10 @@ jobs:
         echo "CONFIG_HAVE_KPROBES=y" >> arch/arm64/configs/gki_defconfig
         echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/gki_defconfig
         echo "CONFIG_OVERLAY_FS=y" >> arch/arm64/configs/gki_defconfig
-        croot
+
+    - name: Add KernelSU
+      run: |
+        cd lineage
         brunch Mi439        
         
     - name: Upload Artifact
