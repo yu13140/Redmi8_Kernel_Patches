@@ -97,15 +97,16 @@ jobs:
         echo "======Ending Repo======"
         rm -f yuzkernel.sh
         
-    - name: Clone Device File
+    - name: Clone Device Tree
       run: |
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_Mi439.git --depth=1
         mkdir -p lineage/device/xiaomi/Mi439/
         mv android_device_xiaomi_Mi439/* lineage/device/xiaomi/Mi439/
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_mithorium-common.git --depth=1
-        mkdir -p lineage/device/xiaomi/mithorium-common/
+        cd android_device_xiaomi_mithorium-common
+        wget https://raw.githubusercontent.com/LineageOS/android_device_xiaomi_mithorium-common/raw/refs/heads/lineage-22.1/mithorium.mk
+        mkdir -p ../lineage/device/xiaomi/mithorium-common/
         mv android_device_xiaomi_mithorium-common/* lineage/device/xiaomi/mithorium-common/
-        
         
     - name: Extract proprietary blobs
       run: |
@@ -130,7 +131,7 @@ jobs:
         cd $GITHUB_WORKSPACE
         sudo umount android/system_dump/system/vendor/
         sudo umount android/system_dump/system/
-        sudo rm -rf android/system_dump/ lineage/device/xiaomi/mithorium-common/
+        sudo rm -rf android/system_dump/
 
     - name: Sync Source Code
       run: |
@@ -156,9 +157,11 @@ jobs:
         echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/gki_defconfig
         echo "CONFIG_OVERLAY_FS=y" >> arch/arm64/configs/gki_defconfig
 
-    - name: Add KernelSU
+    - name: Construct ROM
       run: |
         cd lineage
+        . build/envsetup.sh
+        croot
         brunch Mi439        
         
     - name: Upload Artifact
