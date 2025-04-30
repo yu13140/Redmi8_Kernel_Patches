@@ -104,7 +104,7 @@ jobs:
         mv android_device_xiaomi_Mi439/* lineage/device/xiaomi/Mi439/
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_mithorium-common.git --depth=1
         cd android_device_xiaomi_mithorium-common
-        wget https://raw.githubusercontent.com/LineageOS/android_device_xiaomi_mithorium-common/raw/refs/heads/lineage-22.1/mithorium.mk
+        wget https://raw.githubusercontent.com/LineageOS/android_device_xiaomi_mithorium-common/refs/heads/lineage-22.1/mithorium.mk
         mkdir -p ../lineage/device/xiaomi/mithorium-common/
         mv android_device_xiaomi_mithorium-common/* lineage/device/xiaomi/mithorium-common/
         
