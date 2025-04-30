@@ -103,9 +103,7 @@ jobs:
         mkdir -p lineage/device/xiaomi/Mi439/
         mv android_device_xiaomi_Mi439/* lineage/device/xiaomi/Mi439/
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_mithorium-common.git --depth=1
-        cd android_device_xiaomi_mithorium-common
-        wget https://raw.githubusercontent.com/LineageOS/android_device_xiaomi_mithorium-common/refs/heads/lineage-22.1/mithorium.mk
-        mkdir -p ../lineage/device/xiaomi/mithorium-common/
+        mkdir -p lineage/device/xiaomi/mithorium-common/
         mv android_device_xiaomi_mithorium-common/* lineage/device/xiaomi/mithorium-common/
         
     - name: Extract proprietary blobs
@@ -139,12 +137,11 @@ jobs:
         . build/envsetup.sh
         breakfast "Mi439"
 
-    - name: Extract Kernel Files
-      run: |     
-        if [ ! -d "./lineage/kernel/xiaomi/msm8937/" ]; then
-          echo "❌ Kernel files not found!"
-          exit 1
-        fi
+    - name: Upload Envsetup
+      uses: actions/upload-artifact@v4
+      with:
+        name: envsetup
+        path: lineage/build/envsetup.sh
 
     - name: Add KernelSU
       run: |
