@@ -105,7 +105,7 @@ jobs:
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_mithorium-common.git --depth=1
         mkdir -p lineage/device/xiaomi/mithorium-common/
         mv android_device_xiaomi_mithorium-common/* lineage/device/xiaomi/mithorium-common/
-        
+
     - name: Extract proprietary blobs
       run: |
         mkdir -p android/system_dump/
@@ -136,12 +136,6 @@ jobs:
         cd lineage
         . build/envsetup.sh
         breakfast "Mi439"
-
-    - name: Upload Envsetup
-      uses: actions/upload-artifact@v4
-      with:
-        name: envsetup
-        path: lineage/build/envsetup.sh
 
     - name: Add KernelSU
       run: |
