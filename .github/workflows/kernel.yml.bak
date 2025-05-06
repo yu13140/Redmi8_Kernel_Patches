@@ -158,7 +158,7 @@ jobs:
 
     - name: Compilation ROM
       run: |
-        cd lineage
+         cd lineage
         . build/envsetup.sh
         croot
         brunch Mi439        
