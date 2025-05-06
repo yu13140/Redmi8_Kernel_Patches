@@ -97,7 +97,7 @@ jobs:
         echo "======Ending Repo======"
         rm -f yuzkernel.sh
         
-    - name: Clone Device File
+    - name: Clone Device Tree
       run: |
         git clone -b lineage-22.2 https://github.com/LineageOS/android_device_xiaomi_Mi439.git --depth=1
         mkdir -p lineage/device/xiaomi/Mi439/
@@ -156,9 +156,11 @@ jobs:
         echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/gki_defconfig
         echo "CONFIG_OVERLAY_FS=y" >> arch/arm64/configs/gki_defconfig
 
-    - name: Add KernelSU
+    - name: Compilation ROM
       run: |
-        cd lineage
+         cd lineage
+        . build/envsetup.sh
+        croot
         brunch Mi439        
         
     - name: Upload Artifact
