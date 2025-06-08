@@ -111,7 +111,7 @@ jobs:
       run: |
         mkdir -p android/system_dump/
         cd android/system_dump/
-        wget --output-document=lineageos.zip https://mirror.tuna.tsinghua.edu.cn/lineage-rom/full/Mi439/20250501/lineage-22.2-20250501-nightly-Mi439-signed.zip
+        wget --output-document=lineageos.zip https://mirrors.tuna.tsinghua.edu.cn/lineage-rom/full/Mi439/20250605/lineage-22.2-20250605-nightly-Mi439-signed.zip
         unzip lineageos.zip system.transfer.list system.new.dat* vendor.transfer.list vendor.new.dat*
         rm -f lineage.zip
         brotli --decompress --output=system.new.dat system.new.dat.br
