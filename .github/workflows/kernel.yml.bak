@@ -138,7 +138,25 @@ jobs:
         cd lineage
         sed -i.bak '/^ifneq ($(TARGET_INIT_VENDOR_LIB),)/,/^endif$/d' ./vendor/lineage/config/BoardConfigSoong.mk && rm -f ./vendor/lineage/config/BoardConfigSoong.mk.bak
         . build/envsetup.sh
-        breakfast "Mi439"    
+        breakfast "Mi439"
+
+    - name: Inspect Kernel Files
+      run: |        
+        if [ ! -d "./lineage/kernel/xiaomi/msm8937/" ]; then
+          echo "❌ Kernel files not found!"
+          exit 1
+        fi
+
+    - name: Add KernelSU
+      run: |
+        cd lineage/kernel/xiaomi/msm8937/
+        curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next
+        echo "CONFIG_KSU=y" >> arch/arm64/configs/gki_defconfig
+        echo "CONFIG_MODULES=y" >> arch/arm64/configs/gki_defconfig
+        echo "CONFIG_KPROBES=y" >> arch/arm64/configs/gki_defconfig
+        echo "CONFIG_HAVE_KPROBES=y" >> arch/arm64/configs/gki_defconfig
+        echo "CONFIG_KPROBE_EVENTS=y" >> arch/arm64/configs/gki_defconfig
+        echo "CONFIG_OVERLAY_FS=y" >> arch/arm64/configs/gki_defconfig
 
     - name: Compilation ROM
       run: |
