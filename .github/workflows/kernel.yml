@@ -12,6 +12,7 @@ jobs:
     env:
       PAT: ${{ secrets.ACCESS_TOKEN }}      
       GITHUB_WORKSPACE: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches
+      NOWDATE: 
     timeout-minutes: 360
 
     steps:
@@ -92,7 +93,7 @@ jobs:
         mkdir lineage      
         cd lineage
         repo init -u https://github.com/LineageOS/android.git -b lineage-22.2 --depth=1
-        wget https://raw.githubusercontent.com/yu13140/Redmi8_Kernel_Patches/refs/heads/main/yuzkernel.sh
+        wget --quiet https://raw.githubusercontent.com/yu13140/Redmi8_Kernel_Patches/refs/heads/main/yuzkernel.sh
         bash yuzkernel.sh
         echo "======Ending Repo======"
         rm -f yuzkernel.sh
@@ -111,7 +112,7 @@ jobs:
       run: |
         mkdir -p android/system_dump/
         cd android/system_dump/
-        wget --output-document=lineageos.zip https://mirrors.tuna.tsinghua.edu.cn/lineage-rom/full/Mi439/20250605/lineage-22.2-20250605-nightly-Mi439-signed.zip
+        wget --quiet --output-document=lineageos.zip https://mirrors.tuna.tsinghua.edu.cn/lineage-rom/full/Mi439/20250605/lineage-22.2-20250605-nightly-Mi439-signed.zip
         unzip lineageos.zip system.transfer.list system.new.dat* vendor.transfer.list vendor.new.dat*
         rm -f lineage.zip
         brotli --decompress --output=system.new.dat system.new.dat.br
@@ -135,11 +136,12 @@ jobs:
     - name: Sync Source Code
       run: |
         cd lineage
+        sed -i.bak '/^ifneq ($(TARGET_INIT_VENDOR_LIB),)/,/^endif$/d' ./vendor/lineage/config/BoardConfigSoong.mk && rm -f ./vendor/lineage/config/BoardConfigSoong.mk.bak
         . build/envsetup.sh
         breakfast "Mi439"
 
-    - name: Extract Kernel Files
-      run: |     
+    - name: Inspect Kernel Files
+      run: |        
         if [ ! -d "./lineage/kernel/xiaomi/msm8937/" ]; then
           echo "❌ Kernel files not found!"
           exit 1
@@ -161,10 +163,12 @@ jobs:
         cd lineage
         . build/envsetup.sh
         croot
-        brunch Mi439        
+        brunch Mi439
+        REDATE=$(date "+%Y%m%d")
+        echo "NOWDATE=$REDATE" >> $GITHUB_ENV
         
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4      
       with:
         name: kernel
-        path: $OUT/lineage-22.2-20250426-UNOFFICIAL-Mi439.zip
+        path: $OUT/lineage-22.2-$NOWDATE-UNOFFICIAL-Mi439.zip
