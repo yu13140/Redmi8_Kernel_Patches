@@ -3,16 +3,13 @@ name: Extract Kernel from LineageOS 22.2
 on:
   workflow_dispatch:
   push:
-  schedule:
-    - cron: '0 0 * * *'
 
 jobs:
   build:
     runs-on: ubuntu-22.04
     env:
       PAT: ${{ secrets.ACCESS_TOKEN }}      
-      GITHUB_WORKSPACE: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches    
-    timeout-minutes: 360
+      GITHUB_WORKSPACE: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches
 
     steps:
     - name: Checkout Repository
