@@ -25,7 +25,7 @@ jobs:
         cd device_kernel
         
         # 创建新分支并切换到指定提交
-        git checkout -b manual ff7fe997c7d00a016a12ff1fac4d855d52eee440
+        git checkout -b manual ff7fe997c7d00a016a12ff1fac4d855d52eeea440
         
         # 移除 KernelSU-Next 子模块
         git submodule deinit -f -- KernelSU-Next ||true
