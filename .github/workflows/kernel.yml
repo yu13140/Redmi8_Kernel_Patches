@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       PAT: ${{ secrets.ACCESS_TOKEN }}      
-      GITHUB_WORKSPACE: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches
-      NOWDATE: 
+      GITHUB_WORKSPACE: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches    
     timeout-minutes: 360
 
     steps:
