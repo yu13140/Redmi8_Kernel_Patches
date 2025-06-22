@@ -8,8 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     env:
-      PAT: ${{ secrets.ACCESS_TOKEN }}      
-      GITHUB_WORKSPACE: /home/runner/work/Redmi8_Kernel_Patches/Redmi8_Kernel_Patches    
+      PAT: ${{ secrets.ACCESS_TOKEN }}
 
     steps:
     - name: Checkout Repository
@@ -20,14 +19,23 @@ jobs:
         git config --global user.email "whmyc801@gmail.com"
         git config --global user.name "yu13140"
         
-    - name: Commit to Repository
+    - name: Create Rollback Branch and Remove Submodule
       run: |        
-        git clone -b Cleanup https://${PAT}@github.com/yu13140/android_kernel_xiaomi_sdm439-4.19.git device_kernel
+        git clone https://${PAT}@github.com/yu13140/android_kernel_xiaomi_sdm439-4.19.git device_kernel
         cd device_kernel
-        git branch manual ff7fe997c7d00a016a12ff1fac4d855d52eeea440
-        git checkout manual
-        git submodule deinit KernelSU-Next || true
+        
+        # 创建新分支并切换到指定提交
+        git checkout -b manual ff7fe997c7d00a016a12ff1fac4d855d52eeea440
+        
+        # 移除 KernelSU-Next 子模块
+        git submodule deinit -f -- KernelSU-Next ||true
         git rm --cached KernelSU-Next || true
+        rm -rf .git/modules/KernelSU-Next || true
+        rm -rf KernelSU-Next || true                
+        
+        # 提交删除操作
         git add .
-        git commit -m "Update files $(date +'%Y-%m-%d')" || echo "No changes to commit"
-        git push -f -u origin manual
+        git commit -m "Remove KernelSU-Next submodule"
+        
+        # 推送到远程
+        git push -f origin manual
