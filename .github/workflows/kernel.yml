@@ -2,7 +2,6 @@ name: Extract Kernel from LineageOS 22.2
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   build:

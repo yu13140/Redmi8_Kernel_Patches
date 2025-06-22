@@ -22,10 +22,7 @@ jobs:
     - name: Create Rollback Branch and Remove Submodule
       run: |        
         git clone https://${PAT}@github.com/yu13140/android_kernel_xiaomi_sdm439-4.19.git device_kernel
-        cd device_kernel
-        
-        # 创建新分支并切换到指定提交
-        git checkout -b manual ff7fe997c7d00a016a12ff1fac4d855d52eee440
+        cd device_kernel        
         
         # 移除 KernelSU-Next 子模块
         git submodule deinit -f -- KernelSU-Next ||true
@@ -38,4 +35,4 @@ jobs:
         git commit -m "Remove KernelSU-Next submodule"
         
         # 推送到远程
-        git push -f origin manual
+        git push -f origin Cleanup
