@@ -17,13 +17,13 @@ jobs:
 
     - name: Git Config
       run: |
-        sudo pacman -Syu --needed git base-devel clang llvm lld
+        pacman -Syu --needed git base-devel clang llvm lld
         git config --global user.email "whmyc801@gmail.com"
         git config --global user.name "yu13140"
         
     - name: Clone Project
       run: |     
-        sudo pacman -S rustup
+        pacman -S rustup
         rustup default nightly
         rustup component add rust-src
         rustup target add aarch64-linux-android
