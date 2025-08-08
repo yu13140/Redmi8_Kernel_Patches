@@ -18,8 +18,8 @@ jobs:
     - name: Git Config
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get install git wget curl -y
+        apt-get update
+        apt-get install git wget curl -y
         git config --global user.email "whmyc801@gmail.com"
         git config --global user.name "yu13140"
         
@@ -30,11 +30,11 @@ jobs:
         cd kz
 
         wget https://apt.llvm.org/llvm-snapshot.gpg.key
-        sudo mv llvm-snapshot.gpg.key /etc/apt/trusted.gpg.d/
-        sudo add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main"
-        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo apt-get update
-        sudo apt-get install -y lld llvm-12-dev libclang-12-dev clang-12
+        mv llvm-snapshot.gpg.key /etc/apt/trusted.gpg.d/
+        add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-12 main"
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+        apt-get update
+        apt-get install -y lld llvm-12-dev libclang-12-dev clang-12
 
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
         rustup override set nightly
