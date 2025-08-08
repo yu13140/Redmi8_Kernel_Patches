@@ -23,8 +23,9 @@ jobs:
         
     - name: Build Project
       run: |     
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        sudo pacman -S rustup
         rustup default nightly
+        rustup update nightly
         rustup component add rust-src
         rustup target add aarch64-linux-android        
         rustup target add bpfel-unknown-none
