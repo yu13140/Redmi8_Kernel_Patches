@@ -1,0 +1,34 @@
+name: Arch Linux Build Zloader Module
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: archlinux/archlinux:latest
+    env:
+      PAT: ${{ secrets.ACCESS_TOKEN }}
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Git Config
+      run: |
+        sudo pacman -Syu --needed git base-devel clang llvm lld
+        git config --global user.email "whmyc801@gmail.com"
+        git config --global user.name "yu13140"
+        
+    - name: Clone Project
+      run: |     
+        sudo pacman -S rustup
+        rustup default nightly
+        rustup component add rust-src
+        rustup target add aarch64-linux-android
+        rustup target add bpfel-unknown-none
+        cargo install --git https://github.com/aya-rs/bpf-linker cargo-bpf
+        git clone -b 0413 https://github.com/yu13140/K-zloader.git
+        cd K-zloader
+        cargo xbuild --release
