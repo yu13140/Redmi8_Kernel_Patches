@@ -2,7 +2,6 @@ name: Rollback And Upload To Repository
 
 on:
   workflow_dispatch:
-  push:
 
 jobs:
   build:
