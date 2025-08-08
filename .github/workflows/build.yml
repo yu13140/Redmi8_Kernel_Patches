@@ -24,7 +24,6 @@ jobs:
         git clone -b 0413 https://${PAT}@github.com/yu13140/K-zloader.git kz
         cd kz        
 
-        sudo apt-get wget curl
         wget https://apt.llvm.org/llvm-snapshot.gpg.key
         sudo mv llvm-snapshot.gpg.key /etc/apt/trusted.gpg.d/
         sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-12 main"
@@ -32,6 +31,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y lld llvm-12-dev libclang-12-dev clang-12
 
+        sudo apt install curl
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
         rustup override set nightly
         rustup component add rust-src
