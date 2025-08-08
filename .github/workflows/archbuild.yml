@@ -27,6 +27,8 @@ jobs:
         rustup default nightly
         rustup component add rust-src
         rustup target add aarch64-linux-android
+        rustup toolchain install nightly-2024-06-01
+        rustup override set nightly-2024-06-01
         rustup target add bpfel-unknown-none
         cargo install --git https://github.com/aya-rs/bpf-linker cargo-bpf
         git clone -b 0413 https://${PAT}@github.com/yu13140/K-zloader.git
