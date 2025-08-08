@@ -23,7 +23,7 @@ jobs:
         
     - name: Build Project
       run: |     
-        sudo pacman -S rustup
+        sudo pacman -S rustup --noconfirm
         rustup default nightly
         rustup update nightly
         rustup component add rust-src
