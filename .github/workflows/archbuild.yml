@@ -17,7 +17,7 @@ jobs:
 
     - name: Git Config
       run: |
-        pacman -Syu --needed git base-devel clang llvm lld
+        pacman -Syu --needed git base-devel clang llvm lld --noconfirm
         git config --global user.email "whmyc801@gmail.com"
         git config --global user.name "yu13140"
         
